@@ -30,11 +30,11 @@ function toCreature(card){
 return{
     id: card.id,
     name: card.name,
-    type: card.type,
+    type: card.attribute ?? "Non applicable",
     level:card.level ?? 0,
     stats: {
         attack: card.atk ?? 0,
-        defense: card.def ?? 0
+        defence: card.def ?? 0
         },
     image: card.card_images[0].image_url,
     description:card.desc

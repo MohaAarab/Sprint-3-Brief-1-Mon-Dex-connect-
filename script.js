@@ -23,6 +23,18 @@ async function init(){
   creatures = await getCreatures()
   affich()
 }
+async function loadMore() {
+  try{
+  load_more.disabled=true
+  const a=await getCreatures()
+  creatures.push(...a)
+  affich()
+  }catch(error){
+    console.log(error);
+  }finally{
+     load_more.disabled=false
+  }
+}
 
 function affich(list = creatures) {
   const container = document.querySelector("#grid");
@@ -35,11 +47,11 @@ function affich(list = creatures) {
         <span class="absolute left-3 top-2 font-mono font-bold text-sm text-white">${creature.id}</span>
       </div>
 
-        <h3 class="cre-name font-display text-sm font-bold">${creature.name}</h3>
+        <h3 class="cre-name font-display text-sm font-bold text-brand">${creature.name}</h3>
         <span class="cre-type rounded-full bg-brand-light px-2 py-2 text-sm font-bold text-ink text-center">${creature.type}</span>
       </div>
 
-      <p class="cre-niv text-sm text-muted">${creature.level}</p>
+      <p class=" text-sm text-muted">Niveau <span class="cre-niv">${creature.level}</span></p>
       <button type="button" data-id="${creature.id}" class="btn-add btn-primary btn-outline bg-brand text-line border-solid border-brand-light mt-auto shadow-[0_0_25px_rgba(250,204,21,0.6)]">Ajouter à l'équipe</button>
     </article>
     
@@ -146,6 +158,10 @@ function searchFilter() {
 }
 rech.addEventListener("input", searchFilter);
 tpSelect.addEventListener("change", searchFilter);
+
+// for the add more button
+const load_more=document.querySelector("#load-more")
+load_more.addEventListener("click",loadMore)
 
 // -------------------------------------------------------------
 // 5. CRÉER UNE CRÉATURE
