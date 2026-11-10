@@ -1,4 +1,6 @@
-import { creatures } from "./data.js";
+// import { creatures } from "./data.js";
+import { getCreatures } from "./src/services/api.js";
+let creatures;
 // =============================================================
 // script.js — Mon Dex
 // =============================================================
@@ -16,6 +18,11 @@ let team = [];
 const max = 6;
 
 // 1. AFFICHAGE
+
+async function init(){
+  creatures = await getCreatures()
+  affich()
+}
 
 function affich(list = creatures) {
   const container = document.querySelector("#grid");
@@ -44,8 +51,7 @@ function affich(list = creatures) {
   updateButtons();
 }
 
-affich();
-
+init()
 // 2. DÉTAIL
 
 function detail(creature) {
@@ -404,7 +410,7 @@ teamCreation();
 // finding creatures
 function findCreature(id) {
   for (let i = 0; i < creatures.length; i++) {
-    if (creatures[i].id === id) {
+    if (String(creatures[i].id) === String(id)) {
       return creatures[i];
     }
   }
