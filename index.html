@@ -47,24 +47,10 @@
   <label for="typeFilter" class="sr-only">Filtrer par type</label>
   <select id="typeFilter" class="w-full sm:w-64 rounded-lg border border-brand-light bg-ink text-cream px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
   >
-    <option value="Tous">Tous les types</option>
-    <option value="Bête">Bête</option>
-    <option value="Bête-Guerrier">Bête-Guerrier</option>
-    <option value="Dieu Créateur">Dieu Créateur</option>
-    <option value="Cyberse">Cyberse</option>
-    <option value="Dinosaure">Dinosaure</option>
-    <option value="Bête Divine">Bête Divine</option>
-    <option value="Dragon">Dragon</option>
-    <option value="Démon">Démon</option>
-    <option value="Poisson">Poisson</option>
-    <option value="Insecte">Insecte</option>
-    <option value="Machine">Machine</option>
-    <option value="Rocheux">Rocheux</option>
-    <option value="Serpent de mer">Serpent de mer</option>
-    <option value="Magicien">Magicien</option>
-    <option value="Tonnerre">Tonnerre</option>
-    <option value="Guerrier">Guerrier</option>
-    <option value="Bête Ailée">Bête Ailée</option>
+  <option value="Tous">Tous</option>
+  <option value="Monster">Monstres</option>
+  <option value="Spell Card">Magie</option>
+  <option value="Trap Card">Pièges</option>
   </select>
 </div>
     </section>
@@ -74,10 +60,11 @@
       <!-- ===================== GRILLE DES CRÉATURES ===================== -->
       <section id="grid" aria-label="Créatures" class="grid min-w-0 flex-1 grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
         <div id="cards-container"></div>
-
+        <p id="loading" class=" text-brand text-xl"></p>
 
       </section>
-      <button id="load-more" type="button" class="btn-add btn-primary btn-outline bg-brand text-line border-solid border-brand-light mt-auto shadow-[0_0_25px_rgba(250,204,21,0.6)]">charger plus</button>
+
+      <button id="load-more" type="button" class="load-more btn-primary btn-outline bg-brand text-line border-solid border-brand-light mt-auto shadow-[0_0_25px_rgba(250,204,21,0.6)]">charger plus</button>
 
       <aside class="flex w-full min-w-0 flex-col gap-6 lg:w-[420px] lg:shrink-0">
 
@@ -175,7 +162,6 @@
   </footer>
 
   <!-- data.js (à créer) doit être chargé AVANT script.js -->
-  <script type="module" src="./data.js"></script>
   <script type="module" src="./script.js"></script>
   <script type="module" src="./src/services/api.js"></script>
 </body>

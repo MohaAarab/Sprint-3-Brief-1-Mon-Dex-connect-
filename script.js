@@ -1,28 +1,33 @@
 // import { creatures } from "./data.js";
-import { getCreatures } from "./src/services/api.js";
-let creatures;
-// =============================================================
-// script.js — Mon Dex
-// =============================================================
-// Les données viennent de data.js (la constante `creatures`).
-// Écrivez votre code ici, fonctionnalité par fonctionnalité.
-// Une carte GitHub Projects et au moins un commit par fonctionnalité.
+import { getCreatures,searchCards,resetPagination } from "./src/services/api.js";
+let creatures=[];
+
 
 // the localStorage section
 const storage = JSON.parse(localStorage.getItem("creature")) || [];
-storage.forEach(function (c) {
-  creatures.push(c);
-});
+// storage.forEach(function (c) {
+//   creatures.push(c);});
 
 let team = [];
 const max = 6;
 
 // 1. AFFICHAGE
-
+const loading=document.querySelector("#loading")
 async function init(){
+  loading.textContent="Chargement des cartes..."
+
+try {
   creatures = await getCreatures()
+  creatures.push(...storage)
   affich()
+  loading.textContent=""
+}catch(error){
+     loading.textContent="Erreur de chargement des cartes"
+     console.log(error)
 }
+}
+
+
 async function loadMore() {
   try{
   load_more.disabled=true
@@ -150,25 +155,25 @@ function searchFilter() {
 
   const res = creatures.filter((creature) => {
     const perName = creature.name.toLowerCase().includes(text);
-    const perType = type === "Tous" || creature.type === type;
+    const perType = type === "Tous" ||  (type === "Monster" && creature.type.includes("Monster")) || creature.type === type;
 
     return perName && perType;
   });
   affich(res);
 }
-rech.addEventListener("input", searchFilter);
+// rech.addEventListener("input", searchFilter);
+rech.addEventListener("keydown", function (event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    handleSearch();
+  }
+});
 tpSelect.addEventListener("change", searchFilter);
 
 // for the add more button
 const load_more=document.querySelector("#load-more")
 load_more.addEventListener("click",loadMore)
 
-// -------------------------------------------------------------
-// 5. CRÉER UNE CRÉATURE
-// Validez chaque champ du formulaire avec une expression régulière
-// (voir le tableau du brief). Affichez le message d'erreur sous le
-// champ, et n'ajoutez jamais une créature invalide.
-// -------------------------------------------------------------
 
 // error display function
 function error(id, msg, inputId) {
@@ -392,11 +397,6 @@ function formValidation() {
 }
 formValidation();
 
-// -------------------------------------------------------------
-// 6. MON ÉQUIPE
-// Boutons « Ajouter à l'équipe » et « Retirer », gérés avec UN SEUL
-// écouteur sur la grille et UN SEUL sur l'équipe (délégation).
-// -------------------------------------------------------------
 
 // check if the buttons should be desabled or not
 function updateButtons() {
@@ -498,12 +498,27 @@ function whatToRemove(e) {
 }
 teamSlots.addEventListener("click", whatToRemove);
 
-// -------------------------------------------------------------
-// 7. RÈGLES DE L'ÉQUIPE
-// 6 créatures au maximum, pas de doublon, un message clair quand
-// une action est refusée, et un compteur (x/6).
-// -------------------------------------------------------------
 
-// -------------------------------------------------------------
-// BONUS : LocalStorage, Fetch API, tri, comparaison
-// -------------------------------------------------------------
+
+async function handleSearch() {
+
+  try{
+
+  const resh=rech.value.trim();
+  if(resh === ""){
+    resetPagination()
+    creatures=await getCreatures()
+    affich();
+    return;
+  }
+
+  const result = await searchCards(resh)
+  creatures=result
+  affich()
+
+  }catch(error){
+    console.log(`Error:${error}`)
+  }
+
+
+}

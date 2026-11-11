@@ -30,7 +30,7 @@ function toCreature(card){
 return{
     id: card.id,
     name: card.name,
-    type: card.attribute ?? "Non applicable",
+    type: card.type ?? "Non applicable",
     level:card.level ?? 0,
     stats: {
         attack: card.atk ?? 0,
@@ -50,3 +50,30 @@ export async  function getCreatures(){
 
 }
 
+export async function searchCards(name) {
+        const URL = `https://db.ygoprodeck.com/api/v7/cardinfo.php?fname=${encodeURIComponent(name)}`;
+         try{
+            
+            const response=await fetch(URL)
+
+            if(!response.ok){
+                throw new Error ("HTTP error: " + response.status)
+            }
+            
+            const data= await response.json();
+            
+            return data.data.map(card => toCreature(card));
+
+
+            
+        }catch(error){
+            throw error
+        }
+
+} 
+
+
+
+export function resetPagination(){
+    offset=18
+}
