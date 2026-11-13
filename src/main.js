@@ -19,6 +19,8 @@ import {
   teamCreation,
   error,
   errorRemovale,
+  showRetry,
+  hideRetry,
 } from "./ui.js";
 
 let creatures = [];
@@ -32,7 +34,8 @@ const load_more = document.querySelector("#load-more");
 const detailPanel = document.querySelector("#detail");
 const teamSlots = document.querySelector("#team-slots");
 const teamMsg = document.querySelector("#team-msg");
-
+const retry_btn = document.querySelector("#retry-btn");
+let retryAction = init;
 function rememberCards(cards) {
   cards.forEach((card) => knownCreatures.set(String(card.id), card));
 }
@@ -47,7 +50,7 @@ function renderCurrent() {
   const type = tpSelect.value;
   const favs = getFavorites();
 
-  const filtered = creatures.filter(creature => {
+  const filtered = creatures.filter((creature) => {
     if (type === "Favoris") {
       return favs.includes(String(creature.id));
     }
@@ -72,6 +75,7 @@ async function loadInitialCards() {
 }
 
 async function init() {
+  hideRetry();
   showStatus("Chargement des cartes...");
   try {
     const last = getLastSearch();
@@ -84,25 +88,34 @@ async function init() {
     }
   } catch (error) {
     console.error(error);
+    clearGrid();
     showStatus("Erreur de chargement des cartes");
+    retryAction=init
+    showRetry();
   }
 }
 
 async function loadMore() {
+  hideRetry();
   load_more.disabled = true;
   try {
     const more = await getCreatures();
     creatures.push(...more);
     renderCurrent();
+    showStatus("");
   } catch (error) {
     console.error(error);
+    clearGrid();
     showStatus("Erreur de chargement des cartes");
+    retryAction=loadMore
+    showRetry();
   } finally {
     load_more.disabled = false;
   }
 }
 
 async function handleSearch() {
+  hideRetry();
   const value = rech.value.trim();
   rech.disabled = true;
   showStatus(value ? "Recherche en cours..." : "Chargement des cartes...");
@@ -126,7 +139,10 @@ async function handleSearch() {
     showStatus("");
   } catch (error) {
     console.error(error);
+    clearGrid();
     showStatus("Erreur lors de la recherche");
+    retryAction=handleSearch
+    showRetry();
   } finally {
     rech.disabled = false;
   }
@@ -382,36 +398,33 @@ function addFavorite(id) {
   }
 }
 
-function removeFavorite(id){
-  const favs=getFavorites()
-  id=String(id)
+function removeFavorite(id) {
+  const favs = getFavorites();
+  id = String(id);
 
-  const newFavs = favs.filter((fav)=>fav !== id)
-  saveFavorites(newFavs)
+  const newFavs = favs.filter((fav) => fav !== id);
+  saveFavorites(newFavs);
 }
 
-function toggleFavorites(id){
-  const favs=getFavorites()
-  id=String(id)
+function toggleFavorites(id) {
+  const favs = getFavorites();
+  id = String(id);
 
-    if (favs.includes(id)) {
-      removeFavorite(id)
-
-     }else{
-      addFavorite(id)
-     }
-
+  if (favs.includes(id)) {
+    removeFavorite(id);
+  } else {
+    addFavorite(id);
+  }
 }
-
 
 // Event listeners
 grid.addEventListener("click", (event) => {
   const target = event.target;
   if (target.classList.contains("btn-favorite")) {
-  toggleFavorites(target.dataset.id);
-  renderCurrent();
-  return;
-}
+    toggleFavorites(target.dataset.id);
+    renderCurrent();
+    return;
+  }
   if (target.classList.contains("btn-add")) {
     addToTeam(target.dataset.id);
     return;
@@ -440,6 +453,11 @@ teamSlots.addEventListener("click", (event) => {
   if (event.target.classList.contains("btn-remove")) {
     removeFromTeam(event.target.dataset.id);
   }
+});
+
+retry_btn.addEventListener("click", () => {
+  hideRetry()
+  retryAction()
 });
 
 formValidation();
