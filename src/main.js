@@ -43,14 +43,23 @@ function findCreature(id) {
 
 function renderCurrent() {
   rememberCards(creatures);
+
   const type = tpSelect.value;
-  const filtered = creatures.filter(
-    (creature) =>
+  const favs = getFavorites();
+
+  const filtered = creatures.filter(creature => {
+    if (type === "Favoris") {
+      return favs.includes(String(creature.id));
+    }
+
+    return (
       type === "Tous" ||
       (type === "Monster" && creature.type.includes("Monster")) ||
-      creature.type === type,
-  );
-  affich(filtered, creatures.length, team.length);
+      creature.type === type
+    );
+  });
+
+  affich(filtered, creatures.length, team.length, favs);
 }
 
 async function loadInitialCards() {
@@ -393,6 +402,7 @@ function toggleFavorites(id){
      }
 
 }
+
 
 // Event listeners
 grid.addEventListener("click", (event) => {

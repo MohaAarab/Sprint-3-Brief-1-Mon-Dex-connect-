@@ -32,7 +32,7 @@ export function affich(list, total, teamCount) {
         <span class="cre-type rounded-full bg-brand-light px-2 py-2 text-sm font-bold text-ink text-center">${creature.type}</span>
 
       <p class=" text-sm text-muted">Niveau <span class="cre-niv">${creature.level}</span></p>
-      <button type="button" class="btn-favorite btn-outline bg-brand text-line border-solid border-brand-light mt-auto shadow-[0_0_25px_rgba(250,204,21,0.6)] text-sm" data-id="${creature.id}">Favorite</button>
+      <button type="button" class="btn-favorite btn-outline bg-brand text-line border-solid border-brand-light mt-auto shadow-[0_0_25px_rgba(250,204,21,0.6)] text-sm" data-id="${creature.id}">Favoris</button>
       <button type="button" data-id="${creature.id}" class="btn-add btn-primary btn-outline bg-brand text-line border-solid border-brand-light mt-auto shadow-[0_0_25px_rgba(250,204,21,0.6)] text-sm">Ajouter à l'équipe</button>
     </article>
     
@@ -152,3 +152,4 @@ export function teamCreation(team, findCreature) {
 
   updateButtons(team.length);
 }
+
