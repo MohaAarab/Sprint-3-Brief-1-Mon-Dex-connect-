@@ -153,3 +153,11 @@ export function teamCreation(team, findCreature) {
   updateButtons(team.length);
 }
 
+const retry_btn = document.querySelector("#retry-btn");
+
+export function showRetry(){
+  retry_btn.classList.remove("hidden")
+}
+export function hideRetry(){
+  retry_btn.classList.add("hidden")
+}
