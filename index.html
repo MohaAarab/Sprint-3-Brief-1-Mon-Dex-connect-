@@ -6,6 +6,7 @@
   <title>Mon Dex</title>
   <link rel="icon" type="image/png" href="../src/images/yogiohLogo.png">
   <link rel="stylesheet" href="./dist/output.css">
+
 </head>
 <body class=" bg-[url('../src/images/yogioh.png')] bg-cover bg-fixed bg-center bg-no-repeat font-body text-ink" >
 
@@ -51,6 +52,7 @@
   <option value="Monster">Monstres</option>
   <option value="Spell Card">Magie</option>
   <option value="Trap Card">Pièges</option>
+  <option value="Favoris">Favoris</option>
   </select>
 </div>
     </section>
@@ -58,13 +60,12 @@
     <div class="flex flex-col gap-8 lg:flex-row lg:items-start">
 
       <!-- ===================== GRILLE DES CRÉATURES ===================== -->
-      <section id="grid" aria-label="Créatures" class="grid min-w-0 flex-1 grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+      <section id="grid" aria-label="Créatures" class="grid min-w-0 flex-1 grid-cols-1 gap-5  sm:grid-cols-2 xl:grid-cols-3 ">
         <div id="cards-container"></div>
-        <p id="loading" class=" text-brand text-xl"></p>
-
+        
       </section>
-
-      <button id="load-more" type="button" class="load-more btn-primary btn-outline bg-brand text-line border-solid border-brand-light mt-auto shadow-[0_0_25px_rgba(250,204,21,0.6)]">charger plus</button>
+      <p id="loading" class=" text-brand text-xl"></p>
+      <button id="retry-btn" type="button" class="hidden">Réessayer</button>
 
       <aside class="flex w-full min-w-0 flex-col gap-6 lg:w-[420px] lg:shrink-0">
 
@@ -84,7 +85,7 @@
 
       </aside>
     </div>
-
+    <button id="load-more" type="button" class="load-more btn-primary btn-outline bg-brand text-line border-solid border-brand-light mt-auto shadow-[0_0_25px_rgba(250,204,21,0.6)]">charger plus</button>
     <!-- ===================== FORMULAIRE DE CRÉATION ===================== -->
     <section id="create" aria-label="Nouvelle créature" class="flex flex-col gap-6 rounded-card bg-ground border-2 border-brand-light p-8"style="box-shadow: 0 0 30px rgba(250, 204, 21, 0.6);">
       <div>
@@ -103,26 +104,11 @@
         <label class="flex flex-col gap-1 text-sm font-bold">Type
           <select name="type" id="type" class="field font-normal border border-brand-light bg-ink">
             <option value="">Choisir un type</option>
-                <option value="Tous">Tous les types</option>
-                <option value="Bête">Bête</option>
-                <option value="Bête-Guerrier">Bête-Guerrier</option>
-                <option value="Dieu Créateur">Dieu Créateur</option>
-                <option value="Cyberse">Cyberse</option>
-                <option value="Dinosaure">Dinosaure</option>
-                <option value="Bête Divine">Bête Divine</option>
-                <option value="Dragon">Dragon</option>
-                <option value="Démon">Démon</option>
-                <option value="Poisson">Poisson</option>
-                <option value="Insecte">Insecte</option>
-                <option value="Machine">Machine</option>
-                <option value="Rocheux">Rocheux</option>
-                <option value="Serpent de mer">Serpent de mer</option>
-                <option value="Magicien">Magicien</option>
-                <option value="Tonnerre">Tonnerre</option>
-                <option value="Guerrier">Guerrier</option>
-                <option value="Bête Ailée">Bête Ailée</option>
+            <option value="Monster">Monstres</option>
+            <option value="Spell Card">Magie</option>
+            <option value="Trap Card">favs</option>
           </select>
-          <span class="error-message text-sm font-normal text-muted"></span>
+          <span id="typeError" class="error-message text-sm font-normal text-muted"></span>
         </label>
         <label  class="flex flex-col gap-1 text-sm font-bold">Niveau
           <input name="level" id="level" type="text" placeholder="Base, Niveau 1…" class="field font-normal border border-brand-light bg-ink">
@@ -162,7 +148,6 @@
   </footer>
 
   <!-- data.js (à créer) doit être chargé AVANT script.js -->
-  <script type="module" src="./script.js"></script>
-  <script type="module" src="./src/services/api.js"></script>
+<script type="module" src="./src/main.js"></script>
 </body>
 </html>
