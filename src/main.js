@@ -173,14 +173,14 @@ function removeFromTeam(id) {
 function idValidation() {
   const id = document.querySelector("#id").value.trim();
   errorRemovale("#idError", "#id");
-  const regex = /^#\d{3}$/;
+const regex = /^\d{1,8}$/;
 
   if (id === "") {
     error("idError", "id required", "#id");
     return false;
   }
   if (!regex.test(id)) {
-    error("idError", "the id should be a # followed by 3 numbers", "#id");
+    error("idError", "ID must contain 1 to 8 digits", "#id");
     return false;
   }
   for (let i = 0; i < creatures.length; i++) {

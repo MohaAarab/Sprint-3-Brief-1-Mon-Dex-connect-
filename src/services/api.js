@@ -50,8 +50,9 @@ export async  function getCreatures(){
 
 }
 
+
 export async function searchCards(name) {
-        const URL = `https://db.ygoprodeck.com/api/v7/cardinfo.php?fname=${encodeURIComponent(name)}`;
+        const URL = `https://db.ygoprodeck.com/api/v7/cardinfo.php?fname=${encodeURIComponent(name)}&num=20&offset=0`;
          try{
             
             const response=await fetch(URL)
