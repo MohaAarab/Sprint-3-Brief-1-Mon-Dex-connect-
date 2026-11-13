@@ -6,7 +6,7 @@ L'utilisateur peut consulter les cartes, rechercher par nom, filtrer par type, a
 
 Projet réalisé dans le cadre de la formation **YouCode Safi — Sprint 3 · Brief 1 : Mon Dex connecté**.
 
-**Démo en ligne :** [Mon Dex](https://mohaaarab.github.io/yugioh-dex/)
+**Démo en ligne :** [Mon Dex](https://mohaaarab.github.io/Sprint-3-Brief-1-Mon-Dex-connect-/)
 
 **Repository GitHub :** [yugioh-dex](https://github.com/MohaAarab/Sprint-3-Brief-1-Mon-Dex-connect-.git)
 
