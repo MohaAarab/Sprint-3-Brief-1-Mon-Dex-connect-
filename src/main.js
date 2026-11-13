@@ -317,8 +317,8 @@ function levelValidation() {
     error("levelError", "stats is required", "#level");
     return false;
   }
-  if (Number(level) > 12) {
-    error("levelError", "the max level is 12", "#level");
+  if (Number(level) > 12 || Number(level)<0) {
+    error("levelError", "the level should be between 0 and 12", "#level");
     return false;
   }
   return true;
