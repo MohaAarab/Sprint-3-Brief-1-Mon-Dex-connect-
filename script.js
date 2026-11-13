@@ -13,17 +13,31 @@ const max = 6;
 
 // 1. AFFICHAGE
 const loading=document.querySelector("#loading")
+
 async function init(){
   loading.textContent="Chargement des cartes..."
 
+
 try {
-  creatures = await getCreatures()
-  creatures.push(...storage)
-  affich()
-  loading.textContent=""
+  const val=sessionStorage.getItem("lastSearch")
+  if(val){
+    rech.value=val
+    await handleSearch()
+  }else{
+    resetPagination()
+    creatures = await getCreatures()
+    creatures.push(...storage)
+    affich()
+  }
+
+  if(loading.textContent === "Chargement des cartes..."){
+      loading.textContent=""
+
+  }
+
 }catch(error){
-     loading.textContent="Erreur de chargement des cartes"
-     console.log(error)
+    console.log(error)
+    loading.textContent="Erreur de chargement des cartes"
 }
 }
 
@@ -57,7 +71,7 @@ function affich(list = creatures) {
       </div>
 
       <p class=" text-sm text-muted">Niveau <span class="cre-niv">${creature.level}</span></p>
-      <button type="button" data-id="${creature.id}" class="btn-add btn-primary btn-outline bg-brand text-line border-solid border-brand-light mt-auto shadow-[0_0_25px_rgba(250,204,21,0.6)]">Ajouter à l'équipe</button>
+      <button type="button" data-id="${creature.id}" class="btn-add btn-primary btn-outline bg-brand text-line border-solid border-brand-light mt-auto shadow-[0_0_25px_rgba(250,204,21,0.6)] text-sm">Ajouter à l'équipe</button>
     </article>
     
   `,
@@ -504,20 +518,38 @@ async function handleSearch() {
 
   try{
 
-  const resh=rech.value.trim();
-  if(resh === ""){
-    resetPagination()
-    creatures=await getCreatures()
-    affich();
-    return;
-  }
+    const resh=rech.value.trim();
+    rech.disabled=true
+    if(resh === ""){
+      loading.textContent=""
+      resetPagination()
+      creatures=await getCreatures()
+      affich();
+      sessionStorage.removeItem("lastSearch")
+      return;
+    }
+    sessionStorage.setItem("lastSearch",resh)
 
-  const result = await searchCards(resh)
-  creatures=result
-  affich()
+    loading.textContent="Recherche en cours..."
+    const result = await searchCards(resh)
+      loading.textContent=""
+
+    if(result.length === 0){
+      creatures=[]
+      grid.innerHTML=""
+      loading.textContent="Aucune carte trouvée"
+      return
+    }else{
+
+      creatures=result
+      affich()
+    }
 
   }catch(error){
     console.log(`Error:${error}`)
+    loading.textContent="Erreur lors de la recherche"
+  }finally{
+    rech.disabled=false
   }
 
 

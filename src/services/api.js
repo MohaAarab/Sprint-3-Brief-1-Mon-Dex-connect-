@@ -27,18 +27,18 @@ async function getCard() {
 
 function toCreature(card){
 
-return{
-    id: card.id,
-    name: card.name,
-    type: card.type ?? "Non applicable",
-    level:card.level ?? 0,
-    stats: {
-        attack: card.atk ?? 0,
-        defence: card.def ?? 0
-        },
-    image: card.card_images[0].image_url,
-    description:card.desc
-    }
+  return{
+      id: card.id,
+      name: card.name,
+      type: card.type ?? "Non applicable",
+      level:card.level ?? 0,
+      stats: {
+          attack: card.atk ?? 0,
+          defence: card.def ?? 0
+          },
+      image: card.card_images[0].image_url,
+      description:card.desc
+      }
  
 }
 
@@ -57,6 +57,7 @@ export async function searchCards(name) {
             const response=await fetch(URL)
 
             if(!response.ok){
+                if(response.status === 400) return []
                 throw new Error ("HTTP error: " + response.status)
             }
             
