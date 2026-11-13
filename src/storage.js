@@ -19,3 +19,11 @@ export function saveLastSearch(value) {
 export function clearLastSearch() {
   sessionStorage.removeItem("lastSearch");
 }
+
+export function getFavorites() {
+  return JSON.parse(localStorage.getItem("favorites")) || [];
+}
+
+export function saveFavorites(favorites) {
+  localStorage.setItem("favorites", JSON.stringify(favorites));
+}

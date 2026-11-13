@@ -1,7 +1,25 @@
 // App state, startup and event listeners.
 import { getCreatures, searchCards, resetPagination } from "./services/api.js";
-import { getSavedCreatures, saveCreature, getLastSearch, saveLastSearch, clearLastSearch } from "./storage.js";
-import { affich, detail, hideDetail, showStatus, clearGrid, setLoadMoreVisible, teamCreation, error, errorRemovale } from "./ui.js";
+import {
+  getSavedCreatures,
+  saveCreature,
+  getLastSearch,
+  saveLastSearch,
+  clearLastSearch,
+  getFavorites,
+  saveFavorites,
+} from "./storage.js";
+import {
+  affich,
+  detail,
+  hideDetail,
+  showStatus,
+  clearGrid,
+  setLoadMoreVisible,
+  teamCreation,
+  error,
+  errorRemovale,
+} from "./ui.js";
 
 let creatures = [];
 let team = [];
@@ -16,7 +34,7 @@ const teamSlots = document.querySelector("#team-slots");
 const teamMsg = document.querySelector("#team-msg");
 
 function rememberCards(cards) {
-  cards.forEach(card => knownCreatures.set(String(card.id), card));
+  cards.forEach((card) => knownCreatures.set(String(card.id), card));
 }
 
 function findCreature(id) {
@@ -26,10 +44,11 @@ function findCreature(id) {
 function renderCurrent() {
   rememberCards(creatures);
   const type = tpSelect.value;
-  const filtered = creatures.filter(creature =>
-    type === "Tous" ||
-    (type === "Monster" && creature.type.includes("Monster")) ||
-    creature.type === type
+  const filtered = creatures.filter(
+    (creature) =>
+      type === "Tous" ||
+      (type === "Monster" && creature.type.includes("Monster")) ||
+      creature.type === type,
   );
   affich(filtered, creatures.length, team.length);
 }
@@ -122,7 +141,7 @@ function addToTeam(id) {
 }
 
 function removeFromTeam(id) {
-  team = team.filter(item => item !== id);
+  team = team.filter((item) => item !== id);
   teamCreation(team, findCreature);
 }
 // id validation
@@ -308,7 +327,7 @@ function formValidation() {
     const imgOk = imgValidation();
     const levelOk = levelValidation();
     const descriptionOk = descriptionValidation();
-    const typeOk=typeValidation()
+    const typeOk = typeValidation();
 
     if (
       idOk &&
@@ -344,9 +363,45 @@ function formValidation() {
   });
 }
 
+function addFavorite(id) {
+  const fav = getFavorites();
+  id = String(id);
+
+  if (!fav.includes(id)) {
+    fav.push(id);
+    saveFavorites(fav);
+  }
+}
+
+function removeFavorite(id){
+  const favs=getFavorites()
+  id=String(id)
+
+  const newFavs = favs.filter((fav)=>fav !== id)
+  saveFavorites(newFavs)
+}
+
+function toggleFavorites(id){
+  const favs=getFavorites()
+  id=String(id)
+
+    if (favs.includes(id)) {
+      removeFavorite(id)
+
+     }else{
+      addFavorite(id)
+     }
+
+}
+
 // Event listeners
-grid.addEventListener("click", event => {
+grid.addEventListener("click", (event) => {
   const target = event.target;
+  if (target.classList.contains("btn-favorite")) {
+  toggleFavorites(target.dataset.id);
+  renderCurrent();
+  return;
+}
   if (target.classList.contains("btn-add")) {
     addToTeam(target.dataset.id);
     return;
@@ -357,13 +412,13 @@ grid.addEventListener("click", event => {
   if (creature) detail(creature, team.length);
 });
 
-detailPanel.addEventListener("click", event => {
+detailPanel.addEventListener("click", (event) => {
   const target = event.target;
   if (target.classList.contains("btn-add")) addToTeam(target.dataset.id);
   if (target.classList.contains("btn-close")) hideDetail();
 });
 
-rech.addEventListener("keydown", event => {
+rech.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
     event.preventDefault();
     handleSearch();
@@ -371,7 +426,7 @@ rech.addEventListener("keydown", event => {
 });
 tpSelect.addEventListener("change", searchFilter);
 load_more.addEventListener("click", loadMore);
-teamSlots.addEventListener("click", event => {
+teamSlots.addEventListener("click", (event) => {
   if (event.target.classList.contains("btn-remove")) {
     removeFromTeam(event.target.dataset.id);
   }
