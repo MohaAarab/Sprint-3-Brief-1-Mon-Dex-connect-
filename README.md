@@ -1,158 +1,136 @@
 # Mon Dex · Encyclopédie Yu-Gi-Oh!
 
-Une encyclopédie interactive de cartes monstres **Yu-Gi-Oh!**, utilisable sur téléphone et sur ordinateur. On peut parcourir les cartes, chercher, filtrer par type, voir le détail, créer ses propres créatures et composer une équipe de 6.
+Une application web interactive permettant d'explorer les cartes de l'univers **Yu-Gi-Oh!** grâce à l'API publique **YGOPRODeck**.
 
-Projet réalisé dans le cadre de la formation **YouCode** (Safi) · Sprint 2 · Brief 1.
+L'utilisateur peut consulter les cartes, rechercher par nom, filtrer par type, afficher leurs détails, charger davantage de résultats, gérer ses favoris, créer ses propres cartes et composer une équipe de six cartes maximum.
 
-🔗 **Démo en ligne :** `https://mohaaarab.github.io/yugioh-dex/`
-📋 **Tableau GitHub Projects :** `https://trello.com/invite/b/6ae12a0cad4e26e58b5782e0/ATTIdb0acf342c524c5ba1c2548b6d79be8cC9B24EDE/mon-dex-sprint-2`
+Projet réalisé dans le cadre de la formation **YouCode Safi — Sprint 3 · Brief 1 : Mon Dex connecté**.
+
+**Démo en ligne :** [Mon Dex](https://mohaaarab.github.io/yugioh-dex/)
+
+**Repository GitHub :** [yugioh-dex](https://github.com/MohaAarab/Sprint-3-Brief-1-Mon-Dex-connect-.git)
+
+**Tableau de planification :** [Trello](https://trello.com/invite/b/6af1e07329fd19742b6d8113/ATTIe9c8b33f501435d91251cc9acae3311eE9286456/sprint-3-brief-1-mon-dex-connecte)
 
 ---
 
-## Univers choisi
+## 1. Contexte du projet
 
-**Yu-Gi-Oh!** : des cartes monstres avec un attribut/type, un niveau (étoiles), une ATK et une DEF.
+Dans le Sprint 2, une première version de Mon Dex utilisait un tableau JavaScript statique pour afficher les cartes.
 
+Le Sprint 3 consiste à connecter cette application à une **API externe** afin de récupérer les cartes dynamiquement.
 
-## Technologies
+L'objectif est de réutiliser l'interface existante tout en intégrant les notions suivantes :
 
-| Outil | Rôle |
+- Consommation d'une API REST avec `fetch()`.
+- Programmation asynchrone avec `async/await`.
+- Transformation de données JSON.
+- Pagination et chargement progressif.
+- Recherche à partir de l'API.
+- Gestion des états de chargement, de succès, de résultat vide et d'erreur.
+- Sauvegarde des favoris avec LocalStorage.
+- Conservation de la dernière recherche avec SessionStorage.
+- Organisation du JavaScript en modules ES.
+
+## 2. Technologies utilisées
+
+| Technologie | Utilisation |
 |---|---|
-| HTML5 | Structure de la page (balises sémantiques, `aria-label`, labels accessibles) |
-| Tailwind CSS | Mise en page, thème or/brun, responsive, états (survol, focus, désactivé) |
-| JavaScript (modules ES) | Toute l'interactivité, sans librairie |
-| LocalStorage | Sauvegarde des créatures créées |
-| Git / GitHub | Versionnement, un commit par fonctionnalité |
+| HTML5 | Structure et éléments sémantiques |
+| Tailwind CSS | Design, animations et responsive |
+| JavaScript ES6 | Logique et interactivité |
+| Fetch API | Requêtes HTTP |
+| Async / Await | Gestion des opérations asynchrones |
+| YGOPRODeck API | Source des cartes |
+| LocalStorage | Favoris et cartes personnalisées |
+| SessionStorage | Dernière recherche |
+| Git / GitHub | Versionnement et déploiement |
+| GitHub Pages | Hébergement du site |
 
----
+Le projet utilise du JavaScript natif, sans framework frontend.
 
-## Fonctionnalités
+## 3. API utilisée
 
-### Obligatoires
+**YGOPRODeck API**
 
-- [x] **Affichage** : la grille est générée depuis le tableau `creatures` (`data.js`).
-- [x] **Détail** : un clic sur une carte ouvre un panneau avec l'image, la description et les statistiques en barres. Un bouton ✕ le ferme.
-- [x] **Recherche** : la liste se met à jour pendant la saisie, sans tenir compte des majuscules.
-- [x] **Filtre par type** : un menu déroulant filtre par type, « Tous » réinitialise. La recherche et le filtre fonctionnent ensemble.
-- [x] **Créer une créature** : formulaire validé champ par champ, messages d'erreur sous chaque champ, bordure rouge si invalide. Une créature invalide n'est jamais ajoutée.
-- [x] **Mon équipe** : boutons « Ajouter à l'équipe » et « Retirer », gérés par **délégation d'événements** (un seul écouteur sur la grille, un sur l'équipe).
-- [x] **Règles de l'équipe** : 6 créatures maximum, pas de doublon, message clair quand une action est refusée, compteur `x/6`.
+Documentation : https://ygoprodeck.com/api-guide/
 
-### Interface
+URL de base :
 
-- Grille responsive : 1 colonne sur mobile, 2 sur tablette, 3 sur grand écran.
-- Les cartes se soulèvent au survol.
-- Le bouton « Ajouter à l'équipe » est désactivé quand l'équipe est complète.
-- Style de focus visible sur les éléments cliquables.
+`https://db.ygoprodeck.com/api/v7/`
 
-### Bonus
+L'API est gratuite et ne nécessite pas de clé d'authentification.
 
-- [x] **LocalStorage** : les créatures créées sont conservées après rechargement de la page.
-- [ ] Fetch API
-- [ ] Tri de la grille
-- [ ] Comparaison de deux créatures
+### Endpoints
 
----
+**Récupération des cartes**
 
-
-## Structure du projet
-
-```
-├── design/              Maquettes desktop et mobile
-├── dist/
-│   └── output.css       CSS généré par Tailwind (à garder dans le dépôt)
-├── src/
-│   ├── images/          Logo, fond d'écran et icônes
-│   └── input.css        Directives Tailwind et classes personnalisées
-├── data.js              Tableau des créatures
-├── index.html           Page du Dex
-├── script.js            Logique JavaScript
-├── tailwind.config.js   Thème (couleurs, polices)
-└── package.json
+```text
+GET /cardinfo.php?num=20&offset=0
 ```
 
----
+Récupère les vingt premières cartes.
 
-## Les données
+**Pagination**
 
-`data.js` contient un tableau d'au moins 12 créatures. Chaque créature est un objet :
-
-```js
-{
-  id: "#001",
-  name: "Nom de la carte",
-  type: "Dragon",
-  level: "Niveau 8",
-  stats: { attack: 3000, defence: 2500 },
-  image: "https://.../image.png",
-  description: "Le texte de la carte."
-}
+```text
+GET /cardinfo.php?num=20&offset=20
+GET /cardinfo.php?num=20&offset=40
 ```
 
-**Source des images :** `À COMPLÉTER (ex. YGOPRODeck : https://ygoprodeck.com)`
+Chaque requête récupère la page suivante.
 
----
+**Recherche par nom**
 
-## Validation du formulaire
-
-Les champs sont vérifiés avec des expressions régulières. Voici les règles et leurs tests.
-
-| Champ | Règle | Expression régulière |
-|---|---|---|
-| Numéro | `#` suivi de 3 chiffres, pas déjà utilisé | `/^#\d{3}$/` |
-| Nom | 2 à 30 caractères, commence par une lettre ou un chiffre | `/^[A-Za-zÀ-ÿ0-9][A-Za-zÀ-ÿ0-9 .'-]{1,29}$/` |
-| Type | Choisi dans la liste | Pas de regex (un `select`) |
-| Statistique | Nombre entier de 0 à 999 | `/^\d{1,3}$/` |
-| Image | Lien https qui finit par `.png`, `.jpg`, `.jpeg`, `.webp` ou `.gif` | `/^https:\/\/\S+\.(png\|jpe?g\|webp\|gif)$/i` |
-| Description | 10 à 200 caractères | `/^[\s\S]{10,200}$/` |
-
-### Tests dans la console
-
-Copiez ce code dans la console du navigateur (F12) :
-
-```js
-const tests = [
-  ["Numéro",      /^#\d{3}$/,                                   "#010",                          true],
-  ["Numéro",      /^#\d{3}$/,                                   "#999",                          true],
-  ["Numéro",      /^#\d{3}$/,                                   "010",                           false],
-  ["Numéro",      /^#\d{3}$/,                                   "#10",                           false],
-
-  ["Nom",         /^[A-Za-zÀ-ÿ0-9][A-Za-zÀ-ÿ0-9 .'-]{1,29}$/,   "Kuriboh",                       true],
-  ["Nom",         /^[A-Za-zÀ-ÿ0-9][A-Za-zÀ-ÿ0-9 .'-]{1,29}$/,   "Dragon Blanc aux Yeux Bleus",   true],
-  ["Nom",         /^[A-Za-zÀ-ÿ0-9][A-Za-zÀ-ÿ0-9 .'-]{1,29}$/,   "A",                             false],
-  ["Nom",         /^[A-Za-zÀ-ÿ0-9][A-Za-zÀ-ÿ0-9 .'-]{1,29}$/,   "-Dragon",                       false],
-
-  ["Statistique", /^\d{1,3}$/,                                  "0",                             true],
-  ["Statistique", /^\d{1,3}$/,                                  "999",                           true],
-  ["Statistique", /^\d{1,3}$/,                                  "1000",                          false],
-  ["Statistique", /^\d{1,3}$/,                                  "-5",                            false],
-
-  ["Image",       /^https:\/\/\S+\.(png|jpe?g|webp|gif)$/i,     "https://example.com/a.png",     true],
-  ["Image",       /^https:\/\/\S+\.(png|jpe?g|webp|gif)$/i,     "https://example.com/a.JPG",     true],
-  ["Image",       /^https:\/\/\S+\.(png|jpe?g|webp|gif)$/i,     "http://example.com/a.png",      false],
-  ["Image",       /^https:\/\/\S+\.(png|jpe?g|webp|gif)$/i,     "https://example.com/a.pdf",     false],
-
-  ["Description", /^[\s\S]{10,200}$/,                           "Un monstre très puissant.",     true],
-  ["Description", /^[\s\S]{10,200}$/,                           "a".repeat(200),                 true],
-  ["Description", /^[\s\S]{10,200}$/,                           "Court",                         false],
-  ["Description", /^[\s\S]{10,200}$/,                           "a".repeat(201),                 false],
-];
-
-tests.forEach(([champ, regex, valeur, attendu]) => {
-  const resultat = regex.test(valeur);
-  console.log(resultat === attendu ? "✅" : "❌", champ, JSON.stringify(valeur.slice(0, 30)), "→", resultat);
-});
+```text
+GET /cardinfo.php?fname=Dark%20Magician
 ```
 
-**Résultat attendu :** 20 lignes avec ✅.
+Le paramètre `fname` permet d'effectuer une recherche partielle sur les noms.
 
-> Collez ici une capture d'écran ou le résultat de la console.
+**Recherche paginée**
 
----
+```text
+GET /cardinfo.php?fname=Dragon&num=20&offset=0
+```
 
+Les résultats sont récupérés progressivement par groupes de vingt.
 
-## Auteur
+## 4. Fonctionnalités
 
-**Mohamed Aarab** · étudiant à YouCode, Safi, Maroc
+### Affichage dynamique
 
-*Tous droits réservés. Projet réalisé dans le cadre d'une formation.*
+- [x] Récupération des cartes depuis l'API.
+- [x] Vérification des réponses HTTP avec `response.ok`.
+- [x] Transformation des données API en objets JavaScript simplifiés.
+- [x] Affichage dynamique avec `map()` et `innerHTML`.
+- [x] Affichage des images, noms, types et niveaux.
+
+### Pagination
+
+- [x] Chargement initial de vingt cartes.
+- [x] Bouton « Charger plus ».
+- [x] Gestion des paramètres `limit` et `offset`.
+- [x] Ajout des nouvelles cartes aux cartes déjà chargées.
+- [x] Désactivation du bouton pendant une requête.
+- [x] Pagination distincte pour les recherches.
+
+### Recherche et filtres
+
+- [x] Recherche par nom directement depuis l'API.
+- [x] Prise en charge des noms contenant plusieurs mots avec `encodeURIComponent()`.
+- [x] Recherche déclenchée avec la touche Entrée.
+- [x] Filtrage par catégorie : Tous, Monstres, Magie et Pièges.
+- [x] Filtre Favoris.
+- [x] Retour à la liste initiale lorsque la recherche est effacée.
+- [x] Conservation de la dernière recherche dans SessionStorage.
+
+Le filtre de type s'applique aux cartes actuellement chargées.
+
+### Détails des cartes
+
+- [x] Ouverture du panneau de détails au clic sur une carte.
+- [x] Affichage de l'image et du nom.
+- [x] Affichage du type et de la description.
+- [x] Affichage des statistiques ATK et DEF.
+- [x] Barres vis

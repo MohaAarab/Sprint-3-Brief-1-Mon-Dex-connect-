@@ -173,14 +173,14 @@ function removeFromTeam(id) {
 function idValidation() {
   const id = document.querySelector("#id").value.trim();
   errorRemovale("#idError", "#id");
-  const regex = /^#\d{3}$/;
+const regex = /^\d{1,8}$/;
 
   if (id === "") {
     error("idError", "id required", "#id");
     return false;
   }
   if (!regex.test(id)) {
-    error("idError", "the id should be a # followed by 3 numbers", "#id");
+    error("idError", "ID must contain 1 to 8 digits", "#id");
     return false;
   }
   for (let i = 0; i < creatures.length; i++) {
@@ -317,8 +317,8 @@ function levelValidation() {
     error("levelError", "stats is required", "#level");
     return false;
   }
-  if (Number(level) > 12) {
-    error("levelError", "the max level is 12", "#level");
+  if (Number(level) > 12 || Number(level)<0) {
+    error("levelError", "the level should be between 0 and 12", "#level");
     return false;
   }
   return true;
